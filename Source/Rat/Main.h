@@ -3,7 +3,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "WeaponManager.h"
 #include "Main.generated.h"
+
 
 UCLASS()
 class RAT_API AMain : public ACharacter
@@ -15,18 +17,20 @@ public:
 	AMain();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+		class USpringArmComponent* CameraBoom;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* Camera;
-	
+		class UCameraComponent* Camera;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Equipment")
+		TSubclassOf<AWeaponManager> EquippedBlade;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
-	bool bIsPlayingAnim;
+		bool bIsPlayingAnim;
+	bool RightHandEquipped;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -36,5 +40,5 @@ public:
 	void MoveRight(float Value);
 	void StartSprint();
 	void StopSprint();
-
+	void EquipBlade();
 };

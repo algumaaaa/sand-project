@@ -28,7 +28,7 @@ AMain::AMain()
 void AMain::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AMain::Tick(float DeltaTime)
@@ -48,6 +48,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::StartSprint);
 	InputComponent->BindAction("Sprint", IE_Released, this, &AMain::StopSprint);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AMain::Jump);
+	InputComponent->BindAction("DEBUG_1", IE_Pressed, this, &AMain::EquipBlade);
 
 }
 
@@ -81,4 +82,15 @@ void AMain::StartSprint()
 void AMain::StopSprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 650.f;
+}
+
+void AMain::EquipBlade()
+{
+	if (EquippedBlade != nullptr && !RightHandEquipped) {
+		FVector Loc = GetMesh()->GetSocketLocation("WeaponSocket");
+		FRotator Rot = GetMesh()->GetSocketRotation("WeaponSocket");
+		FActorSpawnParameters Params;
+		Params.Name = "Blade";
+		GetWorld()->SpawnActor<AWeaponManager>(EquippedBlade, Loc, Rot, Params);
+	}
 }
