@@ -25,6 +25,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
 		bool bIsPlayingAnim;
 	bool RightHandEquipped;
+	AWeaponManager* SpawnedBlade;
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,4 +42,6 @@ public:
 	void StartSprint();
 	void StopSprint();
 	void EquipBlade();
+	void SheatheBlade();
+	void UnsheatheBlade();
 };

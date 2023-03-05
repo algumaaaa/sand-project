@@ -86,11 +86,28 @@ void AMain::StopSprint()
 
 void AMain::EquipBlade()
 {
-	if (EquippedBlade != nullptr && !RightHandEquipped) {
-		FVector Loc = GetMesh()->GetSocketLocation("WeaponSocket");
-		FRotator Rot = GetMesh()->GetSocketRotation("WeaponSocket");
+	if (EquippedBlade == nullptr) { return; }
+	if (!RightHandEquipped) {
+		FName Socket = "SOC_Blade";
+		// Spawn the weapon at the socket transform
+		FVector Loc = GetMesh()->GetSocketLocation(Socket);
+		FRotator Rot = GetMesh()->GetSocketRotation(Socket);
 		FActorSpawnParameters Params;
 		Params.Name = "Blade";
-		GetWorld()->SpawnActor<AWeaponManager>(EquippedBlade, Loc, Rot, Params);
+		SpawnedBlade = GetWorld()->SpawnActor<AWeaponManager>(EquippedBlade, Loc, Rot, Params);
+		// Attach to socket
+		SheatheBlade();
 	}
+}
+
+void AMain::SheatheBlade()
+{
+	if (SpawnedBlade == nullptr) { return; }
+	SpawnedBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "SOC_BladeSheathe");
+}
+
+void AMain::UnsheatheBlade()
+{
+	if (SpawnedBlade == nullptr) { return; }
+	SpawnedBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "SOC_Blade");
 }
