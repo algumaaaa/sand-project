@@ -12,7 +12,6 @@ AWeaponManager::AWeaponManager()
 void AWeaponManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AWeaponManager::Tick(float DeltaTime)
@@ -21,3 +20,10 @@ void AWeaponManager::Tick(float DeltaTime)
 
 }
 
+UAnimMontage* AWeaponManager::GetAttackAnimation(int Value)
+{
+	if (AttackA.IsValidIndex(Value)) {
+		return AttackA[Value];
+	}
+	return NULL;
+}

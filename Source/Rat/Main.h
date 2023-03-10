@@ -7,6 +7,7 @@
 #include "Main.generated.h"
 
 
+
 UCLASS()
 class RAT_API AMain : public ACharacter
 {
@@ -24,8 +25,12 @@ public:
 		TSubclassOf<AWeaponManager> EquippedBlade;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Animation")
 		bool bIsPlayingAnim;
+	UPROPERTY(BlueprintReadOnly)
 	bool RightHandEquipped;
+	UPROPERTY(BlueprintReadOnly)
 	AWeaponManager* SpawnedBlade;
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+		int ComboIterator = 0;
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,4 +49,15 @@ public:
 	void EquipBlade();
 	void SheatheBlade();
 	void UnsheatheBlade();
+	void Attack();
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void ResetAttack();
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void IterateAttack();
+
+private:
+	UPROPERTY()
+		bool CanAttack = true;
+	UPROPERTY()
+		FTimerHandle TimerHandle;
 };

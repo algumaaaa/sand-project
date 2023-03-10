@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Animation/AnimMontage.h"
 #include "WeaponManager.generated.h"
+
 
 UCLASS()
 class RAT_API AWeaponManager : public AActor
@@ -19,6 +22,10 @@ public:
 	UStaticMeshComponent* WeaponMesh;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Socket")
 	FName EquipSocket;
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+	TArray<UAnimMontage*> AttackA;
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+	TArray<UAnimMontage*> AttackB;
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,5 +34,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	UAnimMontage* GetAttackAnimation(int Value);
 };

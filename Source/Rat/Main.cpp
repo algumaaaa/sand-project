@@ -48,6 +48,7 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("Sprint", IE_Pressed, this, &AMain::StartSprint);
 	InputComponent->BindAction("Sprint", IE_Released, this, &AMain::StopSprint);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &AMain::Jump);
+	InputComponent->BindAction("Attack", IE_Pressed, this, &AMain::Attack);
 	InputComponent->BindAction("DEBUG_1", IE_Pressed, this, &AMain::EquipBlade);
 
 }
@@ -96,18 +97,57 @@ void AMain::EquipBlade()
 		Params.Name = "Blade";
 		SpawnedBlade = GetWorld()->SpawnActor<AWeaponManager>(EquippedBlade, Loc, Rot, Params);
 		// Attach to socket
-		SheatheBlade();
+		SheatheBlade(); // TODO: Change this to hand later?
+		RightHandEquipped = true;
 	}
 }
 
 void AMain::SheatheBlade()
 {
+	// Attach blade to back socket
 	if (SpawnedBlade == nullptr) { return; }
 	SpawnedBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "SOC_BladeSheathe");
 }
 
 void AMain::UnsheatheBlade()
 {
+	// Attach blade to hand socket
 	if (SpawnedBlade == nullptr) { return; }
 	SpawnedBlade->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "SOC_Blade");
 }
+
+void AMain::Attack()
+{
+	if (SpawnedBlade == nullptr) { return; }
+	UAnimMontage* AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator);
+
+	if (AnimToPlay == nullptr) {
+		ComboIterator = 0;
+		AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator);
+	}
+	
+	if (AnimToPlay == nullptr || !CanAttack) { return; }
+	UnsheatheBlade();
+	float AnimTime = PlayAnimMontage(AnimToPlay, 1.f);
+	CanAttack = false;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMain::ResetAttack, AnimTime, false);
+	
+	
+	FName AtkName = AnimToPlay->GetFName();
+	UE_LOG(LogTemp, Warning, TEXT("AnimToPlay: %s"), *AtkName.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("AnimTime: %f"), AnimTime);
+}
+
+void AMain::ResetAttack()
+{
+	ComboIterator = 0;
+	CanAttack = true;
+	SheatheBlade();
+}
+
+void AMain::IterateAttack()
+{
+	CanAttack = true;
+	++ComboIterator;
+}
+

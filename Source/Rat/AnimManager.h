@@ -21,5 +21,6 @@ public:
 	float VerticalSpeed;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	void AnimNotify_IterateCombo();
 	
 };

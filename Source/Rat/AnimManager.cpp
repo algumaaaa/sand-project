@@ -24,4 +24,10 @@ void UAnimManager::NativeUpdateAnimation(float DeltaSeconds)
 	AMain* OwningCharacter = Cast<AMain>(OwningActor);
 	if (OwningCharacter == nullptr) { return; }
 	IsInAir = OwningCharacter->GetCharacterMovement()->IsFalling();
+
+}
+
+void UAnimManager::AnimNotify_IterateCombo()
+{
+	UE_LOG(LogTemp, Warning, TEXT("CALLED COMBO"));
 }
