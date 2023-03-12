@@ -42,6 +42,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Jump() override;
 	void MoveUp(float Value);
 	void MoveRight(float Value);
 	void StartSprint();
@@ -58,6 +59,8 @@ public:
 private:
 	UPROPERTY()
 		bool CanAttack = true;
+	UPROPERTY()
+		bool IsGroundAttacking = false;
 	UPROPERTY()
 		FTimerHandle TimerHandle;
 };

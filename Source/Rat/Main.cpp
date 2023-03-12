@@ -53,6 +53,13 @@ void AMain::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void AMain::Jump()
+{
+	if (!IsGroundAttacking) {
+		Super::Jump();
+	}
+}
+
 void AMain::MoveUp(float Value)
 {
 	if (Controller == nullptr || Value == 0.f || bIsPlayingAnim) { return; }
@@ -126,22 +133,25 @@ void AMain::Attack()
 		AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator);
 	}
 	
-	if (AnimToPlay == nullptr || !CanAttack) { return; }
+	if (!CanAttack) { return; }
 	UnsheatheBlade();
+
+	if (GetCharacterMovement()->IsFalling()) {
+		// TODO: Air combos
+		return;
+	}
+
 	float AnimTime = PlayAnimMontage(AnimToPlay, 1.f);
 	CanAttack = false;
+	IsGroundAttacking = true;
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMain::ResetAttack, AnimTime, false);
-	
-	
-	FName AtkName = AnimToPlay->GetFName();
-	UE_LOG(LogTemp, Warning, TEXT("AnimToPlay: %s"), *AtkName.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("AnimTime: %f"), AnimTime);
 }
 
 void AMain::ResetAttack()
 {
 	ComboIterator = 0;
 	CanAttack = true;
+	IsGroundAttacking = false;
 	SheatheBlade();
 }
 
