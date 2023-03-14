@@ -128,7 +128,7 @@ void AMain::Attack()
 	if (SpawnedBlade == nullptr) { return; }
 	UAnimMontage* AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator, AttackBranch);
 
-	// If reached end of attack chain, return iterator to 0 and fetch its animation
+	// If reached end of attack chain, return iterator to 0 and fetch its animation, maybe unecessary?
 	if (AnimToPlay == nullptr) {
 		ComboIterator = 0;
 		AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator, AttackBranch);
@@ -141,7 +141,6 @@ void AMain::Attack()
 		// TODO: Air combos
 		return;
 	}
-
 	float AnimTime = PlayAnimMontage(AnimToPlay, 1.f);
 	CanAttack = false;
 	IsGroundAttacking = true;
@@ -151,6 +150,7 @@ void AMain::Attack()
 void AMain::ResetAttack()
 {
 	ComboIterator = 0;
+	AttackBranch = 0;
 	CanAttack = true;
 	IsGroundAttacking = false;
 	SheatheBlade();
@@ -164,8 +164,8 @@ void AMain::IterateAttack()
 
 void AMain::BranchAttack()
 {
+	CanAttack = true;
 	++AttackBranch;
 	ComboIterator = 0;
-	Attack();
 }
 
