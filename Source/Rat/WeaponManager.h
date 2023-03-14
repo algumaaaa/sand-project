@@ -16,7 +16,6 @@ class RAT_API AWeaponManager : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AWeaponManager();
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* WeaponMesh;
@@ -28,11 +27,10 @@ public:
 	TArray<UAnimMontage*> AttackB;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UAnimMontage* GetAttackAnimation(int Value);
+	UAnimMontage* GetAttackAnimation(int Value, int Branch);
+	TArray<UAnimMontage*> GetAttackBranch(int Value);
 };

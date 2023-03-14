@@ -14,16 +14,29 @@ void AWeaponManager::BeginPlay()
 	Super::BeginPlay();
 }
 
+TArray<UAnimMontage*> AWeaponManager::GetAttackBranch(int Value)
+{
+	switch (Value) {
+	case 0:
+		return AttackA;
+	case 1:
+		return AttackB;
+	default:
+		return AttackA;
+	}
+}
+
 void AWeaponManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-UAnimMontage* AWeaponManager::GetAttackAnimation(int Value)
+UAnimMontage* AWeaponManager::GetAttackAnimation(int Value, int Branch)
 {
-	if (AttackA.IsValidIndex(Value)) {
-		return AttackA[Value];
+	TArray<UAnimMontage*> AttackBranch = GetAttackBranch(Branch);
+	if (AttackBranch.IsValidIndex(Value)) {
+		return AttackBranch[Value];
 	}
 	return NULL;
 }

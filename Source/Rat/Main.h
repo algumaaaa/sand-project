@@ -14,7 +14,6 @@ class RAT_API AMain : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AMain();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
@@ -31,16 +30,14 @@ public:
 	AWeaponManager* SpawnedBlade;
 	UPROPERTY(BlueprintReadWrite, Category = "Animation")
 		int ComboIterator = 0;
+	UPROPERTY(BlueprintReadWrite, Category = "Animation")
+		int AttackBranch = 0;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Jump() override;
 	void MoveUp(float Value);
@@ -55,6 +52,8 @@ public:
 	void ResetAttack();
 	UFUNCTION(BlueprintCallable, Category = "Animation")
 	void IterateAttack();
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void BranchAttack();
 
 private:
 	UPROPERTY()

@@ -126,11 +126,12 @@ void AMain::UnsheatheBlade()
 void AMain::Attack()
 {
 	if (SpawnedBlade == nullptr) { return; }
-	UAnimMontage* AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator);
+	UAnimMontage* AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator, AttackBranch);
 
+	// If reached end of attack chain, return iterator to 0 and fetch its animation
 	if (AnimToPlay == nullptr) {
 		ComboIterator = 0;
-		AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator);
+		AnimToPlay = SpawnedBlade->GetAttackAnimation(ComboIterator, AttackBranch);
 	}
 	
 	if (!CanAttack) { return; }
@@ -144,7 +145,7 @@ void AMain::Attack()
 	float AnimTime = PlayAnimMontage(AnimToPlay, 1.f);
 	CanAttack = false;
 	IsGroundAttacking = true;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &AMain::ResetAttack, AnimTime, false);
+	//GetWorldTimerManager().SetTimer(TimerHandle, this, &AMain::ResetAttack, AnimTime, false);
 }
 
 void AMain::ResetAttack()
@@ -159,5 +160,12 @@ void AMain::IterateAttack()
 {
 	CanAttack = true;
 	++ComboIterator;
+}
+
+void AMain::BranchAttack()
+{
+	++AttackBranch;
+	ComboIterator = 0;
+	Attack();
 }
 
